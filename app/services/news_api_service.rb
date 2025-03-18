@@ -1,4 +1,5 @@
  'httparty'
+ require 'dotenv/load' 
 
 class NewsApiService
   BASE_URL = "https://newsapi.org/v2/top-headlines"
