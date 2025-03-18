@@ -1,0 +1,13 @@
+<h1>New Article Alert!</h1>
+
+<p>Hello <%= @user.name %>,</p>
+
+<p>A new article has been published in your favorite category:</p>
+
+<h3><%= @article["title"] %></h3>
+<p><%= @article["description"] %></p>
+<p><strong>Source:</strong> <%= @article["source"]["name"] %></p>
+
+<p>Read more: <a href="<%= @article["url"] %>"><%= @article["url"] %></a></p>
+
+<p>Thanks,<br>News Aggregator Team</p>

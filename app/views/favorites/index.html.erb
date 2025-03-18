@@ -1,0 +1,44 @@
+<h2>Saved Articles</h2>
+
+<% @favorites.each do |favorite| %>
+  <div class="card">
+    <h4><%= link_to favorite.article_title, favorite.article_url, target: "_blank" %></h4>
+    <p><strong>Source:</strong> <%= favorite.article_source %></p>
+    <p><strong>Category:</strong> <%= favorite.article_category.presence || "No category" %></p>
+    
+    <!-- Social Share Buttons -->
+    <div>
+      <strong>Share:</strong>
+      <%= link_to "Twitter", social_share_link(:twitter, favorite.article_title, favorite.article_url), target: "_blank", class: "btn btn-sm btn-primary" %>
+      <%= link_to "Facebook", social_share_link(:facebook, favorite.article_title, favorite.article_url), target: "_blank", class: "btn btn-sm btn-info" %>
+      <%= link_to "WhatsApp", social_share_link(:whatsapp, favorite.article_title, favorite.article_url), target: "_blank", class: "btn btn-sm btn-success" %>
+    </div>
+    <!-- Comment Form -->
+<%= form_with model: [favorite, Comment.new], data: { turbo: true } do |f| %>
+  <div class="mb-2">
+    <%= f.text_area :content, placeholder: "Add a comment...", class: "form-control" %>
+  </div>
+  <%= f.submit "Post Comment", class: "btn btn-sm btn-success" %>
+<% end %>
+
+    
+    
+
+<!-- Display Comments -->
+<h6>Comments:</h6>
+<ul id="comments_<%= favorite.id %>">
+  <% comments = Comment.joins(:favorite).where(favorites: { article_url: favorite.article_url }) %>
+  <% if comments.any? %>
+    <% comments.each do |comment| %>
+      <li id="comment_<%= comment.id %>"><strong><%= comment.user.name %>:</strong> <%= comment.content %></li>
+    <% end %>
+  <% else %>
+    <p>No comments yet.</p>
+  <% end %>
+</ul>
+    
+    
+
+    <%= link_to "Remove", favorite_path(favorite), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger btn-sm" %>
+  </div>
+<% end %>

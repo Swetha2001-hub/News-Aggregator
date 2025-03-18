@@ -1,0 +1,89 @@
+<div class="card mt-4">
+  <div class="card-header bg-danger text-white">
+    <h2>🔥 Trending News</h2>
+  </div>
+  <div class="card-body">
+    <% if @trending_articles.present? %>
+      <ul class="list-group">
+        <% @trending_articles.each do |article| %>
+          <li class="list-group-item">
+            <a href="<%= article.article_url %>" target="_blank">
+              <strong><%= article.article_title %></strong>
+            </a> - Saved <%= article.save_count %> times
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-muted">No trending articles yet.</p>
+    <% end %>
+  </div>
+</div>
+
+
+<div class="card mt-4">
+  <div class="card-header bg-primary text-white">
+    <h2>📰 Latest News</h2>
+  </div>
+  <div class="card-body" style="background-color: #f8f9fa;">  <!-- Light Gray -->
+    <!-- Search Bar -->
+    <form action="<%= articles_path %>" method="get" class="mb-3">
+      <input type="text" name="query" placeholder="Search articles..." class="form-control" value="<%= params[:query] %>">
+      <button type="submit" class="btn btn-primary mt-2">Search</button>
+    </form>
+
+    <!-- Category Filter -->
+    <nav>
+      <%= link_to "General", articles_path(category: "general"), class: "btn btn-outline-primary btn-sm" %>
+      <%= link_to "Technology", articles_path(category: "technology"), class: "btn btn-outline-primary btn-sm" %>
+      <%= link_to "Sports", articles_path(category: "sports"), class: "btn btn-outline-primary btn-sm" %>
+      <%= link_to "Business", articles_path(category: "business"), class: "btn btn-outline-primary btn-sm" %>
+    </nav>
+  </div>
+</div>
+
+
+<hr>
+
+<!-- Check if articles exist -->
+<% if @articles.present? %>
+  <% @articles.each do |article| %>
+    <div>
+      <h3><%= link_to article["title"], article["url"], target: "_blank" %></h3>
+      <p><%= article["description"] %></p>
+      <p><small><%= article["source"]["name"] %></small></p>
+
+      <% if logged_in? %>
+        <%= form_with url: favorites_path, method: :post do |f| %>
+          <%= f.hidden_field :article_title, value: article["title"] %>
+          <%= f.hidden_field :article_url, value: article["url"] %>
+          <%= f.hidden_field :article_source, value: article["source"]["name"] %>
+
+          <!-- Category Dropdown -->
+          <label>Category:</label>
+          <%= f.select :article_category, ["General", "Technology", "Sports", "Business"], prompt: "Select Category", class: "form-select" %>
+
+          <%= f.submit "Save to Favorites", class: "btn btn-primary mt-2" %>
+          
+        <% end %>
+      <% else %>
+        <p><%= link_to "Login to save favorites", login_path, class: "btn btn-warning" %></p>
+      <% end %>
+
+    </div> <!-- Closing div for article -->
+  <% end %> <!-- Closing each loop -->
+
+  <!-- Pagination -->
+  <div class="mt-3">
+    <%= paginate @articles %>
+  </div>
+
+<% else %>
+  <p>No articles available.</p>
+<% end %> <!-- Closing if @articles.present? -->
+
+<!-- Flash Messages -->
+<% if flash[:notice] %>
+  <div class="alert alert-success"><%= flash[:notice] %></div>
+<% elsif flash[:alert] %>
+  <div class="alert alert-danger"><%= flash[:alert] %></div>
+<% end %>

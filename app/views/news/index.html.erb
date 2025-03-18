@@ -1,0 +1,15 @@
+<h2>🔥 Trending News</h2>
+
+<ul>
+  <% if @trending_articles.present? %>
+    <% @trending_articles.each do |article| %>
+      <li>
+        <a href="<%= article["article_url"] %>">
+          <strong><%= article["article_title"] %></strong>
+        </a> - Saved <%= article["save_count"] %> times
+      </li>
+    <% end %>
+  <% else %>
+    <p>No trending articles yet.</p>
+  <% end %>
+</ul>

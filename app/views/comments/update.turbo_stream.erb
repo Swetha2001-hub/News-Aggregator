@@ -1,0 +1,12 @@
+<turbo-stream action="replace" target="comment_<%= @comment.id %>">
+  <template>
+    <li id="comment_<%= @comment.id %>">
+      <strong><%= @comment.user.name %>:</strong> <%= @comment.content %>
+
+      <% if @comment.user == current_user %>
+        <%= link_to "✏️ Edit", edit_favorite_comment_path(@comment.favorite, @comment), data: { turbo_frame: "edit_comment_#{@comment.id}" }, class: "btn btn-sm btn-outline-primary" %>
+        <%= button_to "🗑️ Delete", favorite_comment_path(@comment.favorite, @comment), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-outline-danger" %>
+      <% end %>
+    </li>
+  </template>
+</turbo-stream>

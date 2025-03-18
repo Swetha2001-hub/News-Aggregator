@@ -1,0 +1,8 @@
+<%= turbo_frame_tag "edit_comment_#{@comment.id}" do %>
+  <%= form_with model: [@comment.favorite, @comment], method: :patch, data: { turbo: true } do |f| %>
+    <div class="mb-2">
+      <%= f.text_area :content, class: "form-control" %>
+    </div>
+    <%= f.submit "Update", class: "btn btn-sm btn-success" %>
+  <% end %>
+<% end %>

@@ -1,0 +1,5 @@
+<turbo-stream action="append" target="comments_<%= @favorite.id %>">
+  <template>
+    <li><strong><%= @comment.user.name %>:</strong> <%= @comment.content %></li>
+  </template>
+</turbo-stream>
